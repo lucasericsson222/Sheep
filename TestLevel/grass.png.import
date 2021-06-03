@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Sheep-Sheet.png-a927b1bb053d978e630caa2cee61d6a6.stex"
+path="res://.import/grass.png-9885e9568126769da019b1b2cd30c37c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sheep-Sheet.png"
-dest_files=[ "res://.import/Sheep-Sheet.png-a927b1bb053d978e630caa2cee61d6a6.stex" ]
+source_file="res://TestLevel/grass.png"
+dest_files=[ "res://.import/grass.png-9885e9568126769da019b1b2cd30c37c.stex" ]
 
 [params]
 

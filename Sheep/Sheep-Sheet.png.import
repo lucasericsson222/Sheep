@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Chicken-Sheet.png-4e421568c7bede59d41b86eaf2a4e460.stex"
+path="res://.import/Sheep-Sheet.png-d84688c7d5ba99001bded774a5e76d95.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Chicken-Sheet.png"
-dest_files=[ "res://.import/Chicken-Sheet.png-4e421568c7bede59d41b86eaf2a4e460.stex" ]
+source_file="res://Sheep/Sheep-Sheet.png"
+dest_files=[ "res://.import/Sheep-Sheet.png-d84688c7d5ba99001bded774a5e76d95.stex" ]
 
 [params]
 
