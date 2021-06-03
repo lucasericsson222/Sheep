@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://SheepAnim.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://Sheep.gd" type="Script" id=3]
@@ -6,16 +6,21 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 0.689831
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 41.8181
+[sub_resource type="Shader" id=2]
 
-[sub_resource type="CircleShape2D" id=3]
-radius = 8.87916
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
 
 [sub_resource type="CircleShape2D" id=4]
-radius = 31.4188
+radius = 41.8181
 
 [sub_resource type="CircleShape2D" id=5]
+radius = 8.87916
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 31.4188
+
+[sub_resource type="CircleShape2D" id=7]
 radius = 126.884
 
 [node name="Sheep" type="KinematicBody2D" groups=[
@@ -29,9 +34,9 @@ script = ExtResource( 3 )
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = SubResource( 3 )
 frames = ExtResource( 1 )
 animation = "run"
-frame = 4
 speed_scale = 2.888
 playing = true
 
@@ -39,22 +44,24 @@ playing = true
 visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CohesionArea"]
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 
 [node name="SeparationArea" type="Area2D" parent="."]
 visible = false
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="SeparationArea"]
-shape = SubResource( 3 )
+shape = SubResource( 5 )
 
 [node name="AdhesionArea" type="Area2D" parent="."]
 visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AdhesionArea"]
-shape = SubResource( 4 )
+shape = SubResource( 6 )
 
 [node name="TargetArea" type="Area2D" parent="."]
 visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TargetArea"]
-shape = SubResource( 5 )
+shape = SubResource( 7 )
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

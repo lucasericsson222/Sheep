@@ -1,17 +1,20 @@
 extends KinematicBody2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-var sheep_speed = 1
+
+
 onready var screen_size = get_viewport_rect().size
 var direction = Vector2(0,0)
 var rng = RandomNumberGenerator.new()
-# Called when the node enters the scene tree for the first time.
+onready var anispr = $AnimatedSprite
+onready var carea = $CohesionArea
+onready var sarea = $SeparationArea
+onready var aarea = $AdhesionArea
+onready var tarea = $TargetArea
+
 func _ready():
 	rng.randomize()
-	$AnimatedSprite.frame = rng.randi_range(0,5)
+	anispr.frame = rng.randi_range(0,5)
 	var start_angle = rng.randf_range(0.0, 2 * PI)
 	direction.x = 1000 * cos(start_angle)
 	direction.y = 1000 * sin(start_angle)
@@ -20,15 +23,17 @@ func _ready():
 
 func sheepColorize():
 	
-	var random_color_percent = rng.randf_range(0.0,0.5)
+	var random_brighten_percent = rng.randf_range(0.0,0.5)
 	var random_darken_percent = rng.randf_range(0.0,0.5)
-	$AnimatedSprite.modulate = Color("#F2AF29")
-	$AnimatedSprite.modulate = $AnimatedSprite.modulate.blend(Color(1.0,1.0,1.0,random_color_percent))
-	$AnimatedSprite.modulate = $AnimatedSprite.modulate.blend(Color(0.0,0.0,0.0,random_darken_percent))
+# set the default color to gold
+	anispr.modulate = Color("#F2AF29") 
+# apply color randomness
+	anispr.modulate = anispr.modulate.blend(Color(1.0,1.0,1.0,random_brighten_percent))
+	anispr.modulate = anispr.modulate.blend(Color(0.0,0.0,0.0,random_darken_percent))
 
 
 func cohesion():
-	var neighbor_sheep = $CohesionArea.get_overlapping_bodies()
+	var neighbor_sheep = carea.get_overlapping_bodies()
 	var total_position = Vector2(0,0)
 	var number_of_sheep = 0
 	for sheep in neighbor_sheep:
@@ -44,7 +49,7 @@ func cohesion():
 		return Vector2(0,0)
 func separation():
 	var move_away = Vector2(0,0)
-	var neighbor_sheep = $SeparationArea.get_overlapping_bodies()
+	var neighbor_sheep = sarea.get_overlapping_bodies()
 	for sheep in neighbor_sheep:
 		if sheep == self || !sheep.is_in_group("Sheep"):
 			continue
@@ -52,7 +57,7 @@ func separation():
 	return move_away
 
 func adhesion():
-	var neighbor_sheep = $AdhesionArea.get_overlapping_bodies()
+	var neighbor_sheep = aarea.get_overlapping_bodies()
 	var total_velocity = Vector2(0,0)
 	var number_of_sheep = 0
 	for sheep in neighbor_sheep:
@@ -65,11 +70,11 @@ func adhesion():
 		average_velocity = total_velocity / number_of_sheep
 	return average_velocity / 8
 func target():
-	var neighbor_sheep = $TargetArea.get_overlapping_bodies()
+	var neighbor_sheep = tarea.get_overlapping_bodies()
 	var total_position = Vector2(0,0)
 	var number_of_sheep = 0
 	for sheep in neighbor_sheep:
-		if (sheep == self) || sheep.is_in_group("Sheep"):
+		if (sheep == self) || !sheep.is_in_group("Target"):
 			continue
 		number_of_sheep += 1
 		total_position += sheep.position
@@ -83,16 +88,26 @@ func target():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 func _process(delta):
-	direction += cohesion()
-	direction += separation()
-	direction += adhesion()
-	direction += target()
-	direction = direction.clamped(200) 
+	if anispr.animation == "run":
+# FLOCKING RULES
+		direction += cohesion()
+		direction += separation()
+		direction += adhesion()
+		direction += target()
+# makes sure that the sheep don't go lightspeed
+		direction = direction.clamped(200) 
 #	direction /= 1.01
+# delta ensures that the sheep move at the same speed on different devices
 	position += direction * delta 
-	$AnimatedSprite.flip_h = !(direction.dot(Vector2(1,0)) > 0)
+# if the sheep is going in a different direction, change which way the sprite is facing
+	anispr.flip_h = !(direction.dot(Vector2(1,0)) > 0)
 	screenWrap()
+# make sure that sheep appear in the right order on the screen
 	z_index = position.y
+	if (rng.randf_range(1.0, 500.0) < 2.0):
+		anispr.play("roll")
+		anispr.speed_scale = 2
+	
 	
 func screenWrap():
 	if (position.x > screen_size.x):
@@ -104,3 +119,9 @@ func screenWrap():
 	if position.y < 0:
 		position.y = screen_size.y
 
+
+
+func _on_AnimatedSprite_animation_finished():
+	if anispr.animation == "roll":
+		anispr.play("run")
+		anispr.speed_scale = 2.888
