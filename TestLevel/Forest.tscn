@@ -8,6 +8,7 @@
 [node name="Forest" type="Node2D"]
 
 [node name="TileMap" parent="." instance=ExtResource( 3 )]
+modulate = Color( 0.831373, 0.831373, 0.831373, 1 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 320, 240 )
@@ -78,4 +79,22 @@ __meta__ = {
 }
 
 [node name="Chicken" parent="." instance=ExtResource( 4 )]
-position = Vector2( 170, 226 )
+position = Vector2( 542, 356 )
+
+[node name="Chicken2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 399, 245 )
+
+[node name="Chicken3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 914, 348 )
+
+[node name="Chicken4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 782, 170 )
+
+[node name="Chicken5" parent="." instance=ExtResource( 4 )]
+position = Vector2( 166, 304 )
+
+[node name="Chicken6" parent="." instance=ExtResource( 4 )]
+position = Vector2( 187, 485 )
+
+[node name="Chicken7" parent="." instance=ExtResource( 4 )]
+position = Vector2( 290, 117 )

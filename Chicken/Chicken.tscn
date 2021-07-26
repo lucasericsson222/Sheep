@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Chicken/Chicken-Sheet.png" type="Texture" id=1]
+[ext_resource path="res://Chicken/Chicken-Sheet-Gray.png" type="Texture" id=1]
+[ext_resource path="res://Chicken/Chicken.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 6.0
@@ -34,13 +35,23 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="Chicken" type="KinematicBody2D"]
+[node name="Chicken" type="KinematicBody2D" groups=[
+"Chicken",
+]]
 scale = Vector2( 4, 4 )
+script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+modulate = Color( 1, 0.231373, 0.231373, 1 )
 frames = SubResource( 6 )
 animation = "run"
+speed_scale = 1.996
 playing = true
+
+[node name="ChangeDirTimer" type="Timer" parent="."]
+wait_time = 4.0
+
+[connection signal="timeout" from="ChangeDirTimer" to="." method="_on_ChangeDirTimer_timeout"]
